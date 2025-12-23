@@ -7,6 +7,8 @@ const OrderEditor = () => {
     request: "",
   });
 
+  const addressRef = useRef();
+
   const onChange = (e) => {
     setInput({
       ...input,
@@ -15,9 +17,13 @@ const OrderEditor = () => {
   };
 
   const onSubmit = () => {
-    alert(
-      `주문이 완료되었습니다.\n메뉴: ${input.menu}\n주소: ${input.address}\n요청사항: ${input.request}`
-    );
+    if (input.address === "") {
+      addressRef.current.focus();
+    } else {
+      alert(
+        `주문이 완료되었습니다.\n메뉴: ${input.menu}\n주소: ${input.address}\n요청사항: ${input.request}`
+      );
+    }
   };
 
   return (
@@ -41,6 +47,7 @@ const OrderEditor = () => {
       <div>
         <div style={{ marginBottom: 5, fontSize: 14 }}>배달 주소</div>
         <input
+          ref={addressRef}
           name="address"
           value={input.address}
           onChange={onChange}
