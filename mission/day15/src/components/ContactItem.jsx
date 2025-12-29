@@ -1,11 +1,15 @@
 import "./ContactItem.css";
 
-export default function ContactItem({ id, name, email }) {
+export default function ContactItem({ id, name, email, onDelete }) {
+  const onClickDelete = () => {
+    onDelete(id);
+  };
+
   return (
     <div className="ContactItem">
       <div className="name">{name}</div>
       <div className="contact">{email}</div>
-      <button>🗑️ Remove</button>
+      <button onClick={onClickDelete}>🗑️ Remove</button>
     </div>
   );
 }

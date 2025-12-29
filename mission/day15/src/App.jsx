@@ -7,6 +7,8 @@ function reducer(state, action) {
   switch (action.type) {
     case "CREATE":
       return [action.data, ...state];
+    case "DELETE":
+      return state.filter((item) => item.id !== action.targetId);
     default:
       return state;
   }
@@ -35,8 +37,11 @@ function App() {
     });
   };
 
-  const onDelete = () => {
-    dispatch();
+  const onDelete = (targetId) => {
+    dispatch({
+      type: "DELETE",
+      targetId: targetId,
+    });
   };
 
   return (
