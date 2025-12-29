@@ -46,7 +46,6 @@ export default function ContactEditor({ onCreate }) {
 
     dispatch({
       type: "RESET",
-      value: "",
     });
   };
 
