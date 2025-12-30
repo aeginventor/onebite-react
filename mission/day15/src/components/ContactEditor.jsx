@@ -1,4 +1,4 @@
-import { useReducer, useRef } from "react";
+import { useReducer, useRef, memo } from "react";
 import "./ContactEditor.css";
 
 function reducer(state, action) {
@@ -14,7 +14,7 @@ function reducer(state, action) {
   }
 }
 
-export default function ContactEditor({ onCreate }) {
+function ContactEditor({ onCreate }) {
   const [contents, dispatch] = useReducer(reducer, { name: "", email: "" });
   const nameRef = useRef();
   const emailRef = useRef();
@@ -72,3 +72,5 @@ export default function ContactEditor({ onCreate }) {
     </div>
   );
 }
+
+export default memo(ContactEditor);
