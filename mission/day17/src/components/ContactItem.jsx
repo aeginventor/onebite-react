@@ -1,7 +1,10 @@
 import "./ContactItem.css";
-import { memo } from "react";
+import { memo, useContext } from "react";
+import { dispatchContext } from "../App";
 
-function ContactItem({ id, name, email, onDelete }) {
+function ContactItem({ id, name, email }) {
+  const { onDelete } = useContext(dispatchContext);
+
   const onClickDelete = () => {
     onDelete(id);
   };

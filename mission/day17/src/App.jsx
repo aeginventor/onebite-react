@@ -1,5 +1,5 @@
 import "./App.css";
-import { useRef, useReducer, useCallback } from "react";
+import { useRef, useReducer, useCallback, createContext, useMemo } from "react";
 import ContactEditor from "./components/ContactEditor";
 import ContactList from "./components/ContactList";
 
@@ -21,6 +21,9 @@ const mockData = [
     email: "example@gmail.com",
   },
 ];
+
+export const stateContext = createContext();
+export const dispatchContext = createContext();
 
 function App() {
   const [contacts, dispatch] = useReducer(reducer, mockData);
@@ -44,15 +47,26 @@ function App() {
     });
   }, []);
 
+  const memoizedDispatch = useMemo(() => {
+    return {
+      onCreate,
+      onDelete,
+    };
+  }, []);
+
   return (
     <div className="App">
       <h2>Contact List</h2>
-      <section>
-        <ContactEditor onCreate={onCreate} />
-      </section>
-      <section>
-        <ContactList contacts={contacts} onDelete={onDelete} />
-      </section>
+      <stateContext.Provider value={contacts}>
+        <dispatchContext.Provider value={memoizedDispatch}>
+          <section>
+            <ContactEditor />
+          </section>
+          <section>
+            <ContactList />
+          </section>
+        </dispatchContext.Provider>
+      </stateContext.Provider>
     </div>
   );
 }

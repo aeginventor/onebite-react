@@ -1,5 +1,6 @@
-import { useReducer, useRef, memo } from "react";
+import { useReducer, useRef, memo, useContext } from "react";
 import "./ContactEditor.css";
+import { dispatchContext } from "../App";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -14,10 +15,11 @@ function reducer(state, action) {
   }
 }
 
-function ContactEditor({ onCreate }) {
+function ContactEditor() {
   const [contents, dispatch] = useReducer(reducer, { name: "", email: "" });
   const nameRef = useRef();
   const emailRef = useRef();
+  const { onCreate } = useContext(dispatchContext);
 
   const handleNameChange = (e) => {
     dispatch({
