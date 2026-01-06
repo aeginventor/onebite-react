@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import NewTransaction from "./pages/NewTransaction";
 import EditTransaction from "./pages/EditTransaction";
@@ -50,16 +50,10 @@ const mockData = [
   },
 ];
 
-const TransactionStateContext = createContext();
-const TransactionDispatchContext = createContext();
+export const TransactionStateContext = createContext();
+export const TransactionDispatchContext = createContext();
 
 function App() {
-  const nav = useNavigate();
-
-  const onClickButton = () => {
-    nav("/new-transaction");
-  };
-
   const [transactions, setTransactions] = useReducer(reducer, []);
   const idRef = useRef(3);
 
@@ -119,18 +113,6 @@ function App() {
             onDeleteTransaction,
           }}
         >
-          <div>
-            <Link to={"/"}>Home</Link>
-          </div>
-          <div>
-            <Link to={"/new-transaction"}>NewTransaction</Link>
-          </div>
-          <div>
-            <Link to={"/edit-transaction"}>EditTranscation</Link>
-          </div>
-          <div>
-            <button onClick={onClickButton}>NEW</button>
-          </div>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/new-transaction" element={<NewTransaction />} />
