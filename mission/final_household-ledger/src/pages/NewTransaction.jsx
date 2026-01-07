@@ -1,3 +1,4 @@
+import "./NewTransaction.css";
 import TransactionEditor from "../components/TransactionEditor";
 import { useContext } from "react";
 import { TransactionDispatchContext } from "../App";
@@ -29,7 +30,10 @@ const NewTransaction = () => {
   };
 
   return (
-    <div>
+    <div className="NewTransaction">
+      <header>
+        <h1>새로운 기록</h1>
+      </header>
       <TransactionEditor onSubmit={onSumbit} />
     </div>
   );

@@ -23,8 +23,8 @@ export default function TransactionEditor({ onSubmit }) {
   const [input, setInput] = useState({
     name: "",
     amount: 0,
-    type: "",
-    category: "",
+    type: "expense",
+    category: "🍚 식비",
     date: new Date(),
   });
   const nav = useNavigate();
@@ -50,8 +50,7 @@ export default function TransactionEditor({ onSubmit }) {
     <div className="TransactionEditor">
       <div>
         <div className="description">분류</div>
-        <select name="type" onChange={onChangeInput}>
-          <option></option>
+        <select name="type" value={input.type} onChange={onChangeInput}>
           <option value="expense">지출</option>
           <option value="income">수입</option>
         </select>
@@ -62,6 +61,7 @@ export default function TransactionEditor({ onSubmit }) {
           type="text"
           id="name"
           name="name"
+          value={input.name}
           onChange={onChangeInput}
           placeholder="지출 & 수입 이름을 입력하세요 ..."
         />
@@ -72,14 +72,14 @@ export default function TransactionEditor({ onSubmit }) {
           type="number"
           id="amount"
           name="amount"
+          value={input.amount}
           onChange={onChangeInput}
           placeholder="금액을 입력하세요"
         />
       </div>
       <div>
         <div className="description">카테고리</div>
-        <select name="category" onChange={onChangeInput}>
-          <option></option>
+        <select name="category" value={input.category} onChange={onChangeInput}>
           {categories.map((category) => (
             <option key={category} value={category}>
               {category}
