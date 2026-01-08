@@ -1,39 +1,38 @@
 import "./TransactionEditor.css";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { TransactionDispatchContext } from "../App";
+import { getStringedDate } from "../util/get-stringed-date";
 
 const categories = ["🍚 식비", "💧 구독", "🏠 생활", "🏢 급여", "💰 금융"];
 
-const getStringedDate = (targetDate) => {
-  let year = targetDate.getFullYear();
-  let month = targetDate.getMonth() + 1;
-  let date = targetDate.getDate();
-
-  if (month < 10) {
-    month = `0${month}`;
-  }
-  if (date < 10) {
-    date = `0${date}`;
-  }
-
-  return `${year}-${month}-${date}`;
-};
-
-export default function TransactionEditor({ onSubmit }) {
+export default function TransactionEditor({ type, initData }) {
   const [input, setInput] = useState({
     name: "",
     amount: 0,
     type: "expense",
-    category: "🍚 식비",
+    category: categories[0],
     date: new Date(),
   });
+  const { onCreateTransaction, onUpdateTransaction } = useContext(
+    TransactionDispatchContext
+  );
   const nav = useNavigate();
+
+  useEffect(() => {
+    if (type === "EDIT" && initData) {
+      setInput({
+        ...initData,
+        date: new Date(initData.date),
+      });
+    }
+  }, [type, initData]);
 
   const onChangeInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
 
-    if (name == "amount") value = new Number(value);
+    if (name == "amount") value = Number(value);
     if (name == "date") value = new Date(value);
 
     setInput({
@@ -42,8 +41,36 @@ export default function TransactionEditor({ onSubmit }) {
     });
   };
 
-  const onClickSubmitButton = () => {
-    onSubmit(input);
+  const onSubmit = () => {
+    if (!input.name || !input.amount || !input.type || !input.category) {
+      return;
+    }
+    if (type === "NEW") {
+      onCreateTransaction(
+        input.name,
+        input.amount,
+        input.type,
+        input.category,
+        input.date.getTime()
+      );
+    }
+
+    if (type === "EDIT") {
+      if (window.confirm("거래 기록을 수정하시겠습니까?")) {
+        onUpdateTransaction(
+          initData.id,
+          input.name,
+          input.amount,
+          input.type,
+          input.category,
+          input.date.getTime()
+        );
+      } else {
+        return;
+      }
+    }
+
+    nav("/", { replace: true });
   };
 
   return (
@@ -98,7 +125,7 @@ export default function TransactionEditor({ onSubmit }) {
         />
       </div>
       <div className="button_container">
-        <button className="submit_button" onClick={onClickSubmitButton}>
+        <button className="submit_button" onClick={onSubmit}>
           저장
         </button>
         <button className="cancel_button" onClick={() => nav(-1)}>
